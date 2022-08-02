@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branchesignore:
+      - 'main'
+
+jobs:
+  test_oclif_cli:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+      - name: "Install dependencies"
+        shell: bash
+        run: npm ci
+      - name: "Run tests"
+        shell: bash
+        run: npm test

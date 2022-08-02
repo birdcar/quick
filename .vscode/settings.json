@@ -1,0 +1,8 @@
+{
+  "eslint.alwaysShowStatus": false,
+  "eslint.codeActionsOnSave.mode": "all",
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
+}
