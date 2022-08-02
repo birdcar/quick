@@ -1,0 +1,37 @@
+name: "{{ name }}"
+author: "{{ authorName }} <{{ authorEmail }}>"
+description: "{{ description }}"
+
+{% if not inputs.length %}
+inputs:
+  # @todo: Define inputs
+{% else %}
+inputs:
+  {% for input in inputs %}
+  {{ input.name }}:
+    required: {{ input.required }}
+    description: {{ input.description }}
+    default: {{ input.defaultValue }}
+  {% endfor %}
+{% endif %}
+{% if not outputs.length %}
+  # @todo: Define outputs
+{% else %}
+outputs:
+  {% for output in action.outputs %}
+  {{ output.name }}:
+    description: {{ output.description }}
+  {% endfor %}
+{% endif %}
+
+runs:
+  {% if not composite %}
+  using: "node16"
+  main: "dist/index.js"
+  {% else %}
+  using: composite
+  steps:
+    - name: Sanity check
+      shell: bash
+      run: echo 'Your action is running!'
+  {% endif %}
