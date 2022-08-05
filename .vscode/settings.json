@@ -1,6 +1,7 @@
 {
   "eslint.alwaysShowStatus": false,
   "[typescript]": {
+    "editor.wordWrap": "off",
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true
     }
