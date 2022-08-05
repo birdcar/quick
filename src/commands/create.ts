@@ -1,7 +1,18 @@
-import { Command, Flags } from "@oclif/core";
+import slugify from 'slugify'
+import * as path from 'node:path'
+import * as fs from 'node:fs/promises'
+
+import {Command, Flags} from '@oclif/core'
+import {Environment, FileSystemLoader} from 'nunjucks'
+
+import {ActionRequirement} from '../interfaces'
+import {getGitInfo, parseRequirements} from '../parsers'
+
+const loader = new FileSystemLoader(path.join(__dirname, '..', '..', 'templates'))
+const env = new Environment(loader)
 
 export default class Create extends Command {
-  static description = "Create a new GitHub Action";
+  static description = 'Create a new GitHub Action in a subdirectory';
 
   static examples = [
     '<%= config.bin %> <%= command.id %> add_to_project',
@@ -12,38 +23,84 @@ export default class Create extends Command {
   ];
 
   static flags = {
-    composite: Flags.boolean({
-      char: "c",
-      description: "Generate a composite rather than a Node action",
-      default: false,
+    authorEmail: Flags.string({
+      char: 'e',
+      description: 'The public email of the author (uses git config if not provided)',
     }),
     authorName: Flags.string({
-      char: "a",
-      description: "The given name of the author (uses git config if not provided)",
+      char: 'a',
+      description: 'The given name of the author (uses git config if not provided)',
     }),
-    authorEmail: Flags.string({
-      char: "e",
-      description: "The public email of the author (uses git config if not provided)",
+    composite: Flags.boolean({
+      char: 'c',
+      description: 'Generate a composite rather than a Node action',
+      default: false,
+    }),
+    description: Flags.string({
+      char: 'd',
+      description: 'The description for the action',
     }),
     githubHandle: Flags.string({
       char: 'g',
       description: "The GitHub username of the author (uses origin remote if value isn't provided and remote is available)",
     }),
+    inputs: Flags.string({
+      char: 'i',
+      description: 'The input values you want the action to take, if any (specified as `name:description:required:default`. Multiples are allowed).',
+      multiple: true,
+    }),
+    outputs: Flags.string({
+      char: 'o',
+      description: 'The output values you want the action to return, if any (specified as `name:description:required:default`. Multiples are allowed).',
+      multiple: true,
+    }),
   };
 
   static args = [
-    { name: "name", required: true },
-    { name: "inputs" },
-    { name: "outputs" },
+    {
+      name: 'name',
+      description: "The name of the action you'd like to create (will be slugified)",
+      required: true,
+    },
   ];
 
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Create);
+    const {args, flags} = await this.parse(Create)
 
-    this.log(`Project name: ${args.name}`);
+    const name = slugify(args.name, {
+      lower: true,
+      trim: true,
+    })
 
-    if (flags.composite) {
-      this.log(`you input --composite: ${flags.composite}`);
+    let inputs: ActionRequirement[] = []
+    if (flags.inputs && flags.inputs.length > 0) {
+      inputs = parseRequirements(flags.inputs)
+    }
+
+    let outputs: ActionRequirement[] = []
+    if (flags.outputs && flags.outputs.length > 0) {
+      outputs = parseRequirements(flags.outputs)
+    }
+
+    const context = {
+      ...await getGitInfo(),
+      ...args,
+      ...flags,
+      name,
+      inputs,
+      outputs,
+    }
+
+    const actionPath = path.join(process.cwd(), context.name)
+    await fs.mkdir(actionPath)
+    await fs.writeFile(path.join(actionPath, 'README.md'), env.render('README.md', context))
+    await fs.writeFile(path.join(actionPath, 'action.yml'), env.render('action.yml', context))
+
+    // If it's a JS action and not a composite action, also create the required JS files
+    if (!context.composite) {
+      await fs.mkdir(path.join(actionPath, 'src'))
+      await fs.writeFile(path.join(actionPath, 'package.json'), env.render('package.json', context))
+      await fs.writeFile(path.join(actionPath, 'src', 'index.js'), '\n')
     }
   }
 }
