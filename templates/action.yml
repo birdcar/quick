@@ -2,25 +2,20 @@ name: "{{ name }}"
 author: "{{ authorName }} <{{ authorEmail }}>"
 description: "{{ description }}"
 
-{% if not inputs.length %}
-inputs:
-  # @todo: Define inputs
-{% else %}
+{% if inputs.length %}
 inputs:
   {% for input in inputs %}
   {{ input.name }}:
     required: {{ input.required }}
-    description: {{ input.description }}
-    default: {{ input.defaultValue }}
+    description: "{{ input.description }}"
+    default: "{{ input.default }}"
   {% endfor %}
 {% endif %}
-{% if not outputs.length %}
-  # @todo: Define outputs
-{% else %}
+{% if outputs.length %}
 outputs:
-  {% for output in action.outputs %}
+  {% for output in outputs %}
   {{ output.name }}:
-    description: {{ output.description }}
+    description: "{{ output.description }}"
   {% endfor %}
 {% endif %}
 
