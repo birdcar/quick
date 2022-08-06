@@ -1,6 +1,6 @@
 {
   "name": "@birdcar/quick",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A GitHub Action creator",
   "author": "Birdcar <devrel@birdcar.dev>",
   "bin": {
