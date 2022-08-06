@@ -68,6 +68,7 @@ export default class Create extends Command {
     const {args, flags} = await this.parse(Create)
 
     const name = slugify(args.name, {
+      replacement: '_',
       lower: true,
       trim: true,
     })
