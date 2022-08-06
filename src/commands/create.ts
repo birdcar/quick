@@ -15,11 +15,11 @@ export default class Create extends Command {
   static description = 'Create a new GitHub Action in a subdirectory';
 
   static examples = [
-    '<%= config.bin %> <%= command.id %> add_to_project',
-    '<%= config.bin %> <%= command.id %> add_to_project -c',
-    '<%= config.bin %> <%= command.id %> add_to_project --composite',
+    '<%= config.bin %> <%= command.id %> "Add to project"',
+    '<%= config.bin %> <%= command.id %> "Add to project" --composite',
     '<%= config.bin %> <%= command.id %> add_to_project --authorName="Mona Octocat" --authorEmail="mona.octocat@example.com"',
     '<%= config.bin %> <%= command.id %> add_to_project -g octocat',
+    '<%= config.bin %> <%= command.id %> "Hello World" --description="greet someone and record the time" --inputs who-to-greet:"who to greet":true:"World" --outputs time:"The time we greeted you"',
   ];
 
   static flags = {
