@@ -8,17 +8,18 @@ A CLI to automate the creation of a GitHub Action.
 [![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/oclif/hello-world/blob/main/package.json)
 
 <!-- toc -->
+* [Quick](#quick)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g quick
+$ npm install -g @birdcar/quick
 $ quick COMMAND
 running command...
 $ quick (--version)
-quick/0.0.0 darwin-arm64 node-v16.15.1
+@birdcar/quick/0.0.1 darwin-arm64 node-v16.15.1
 $ quick --help [COMMAND]
 USAGE
   $ quick COMMAND
@@ -27,45 +28,48 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`quick create [ACTION_SLUG]`](#quick-create-action_slug)
+* [`quick create NAME`](#quick-create-name)
 * [`quick help [COMMAND]`](#quick-help-command)
-* [`quick plugins`](#quick-plugins)
-* [`quick plugins:install PLUGIN...`](#quick-pluginsinstall-plugin)
-* [`quick plugins:inspect PLUGIN...`](#quick-pluginsinspect-plugin)
-* [`quick plugins:install PLUGIN...`](#quick-pluginsinstall-plugin-1)
-* [`quick plugins:link PLUGIN`](#quick-pluginslink-plugin)
-* [`quick plugins:uninstall PLUGIN...`](#quick-pluginsuninstall-plugin)
-* [`quick plugins:uninstall PLUGIN...`](#quick-pluginsuninstall-plugin-1)
-* [`quick plugins:uninstall PLUGIN...`](#quick-pluginsuninstall-plugin-2)
-* [`quick plugins update`](#quick-plugins-update)
 
-## `quick create [ACTION_SLUG]`
+## `quick create NAME`
 
-Create a new GitHub Action
+Create a new GitHub Action in a subdirectory
 
 ```
 USAGE
-  $ quick create [ACTION_SLUG] -a <value> -e <value> [-c]
+  $ quick create [NAME] [-e <value>] [-a <value>] [-c] [-d <value>] [-g <value>] [-i <value>] [-o <value>]
+
+ARGUMENTS
+  NAME  The name of the action you'd like to create (will be slugified)
 
 FLAGS
-  -a, --authorName=<value>   (required) The given name of the author
-  -c, --composite            Generate a composite rather than a Node action
-  -e, --authorEmail=<value>  (required) The public email of the author
+  -a, --authorName=<value>    The given name of the author (uses git config if not provided)
+  -c, --composite             Generate a composite rather than a Node action
+  -d, --description=<value>   The description for the action
+  -e, --authorEmail=<value>   The public email of the author (uses git config if not provided)
+  -g, --githubHandle=<value>  The GitHub username of the author (uses origin remote if value isn't provided and remote
+                              is available)
+  -i, --inputs=<value>...     The input values you want the action to take, if any (specified as
+                              `name:description:required:default`. Multiples are allowed).
+  -o, --outputs=<value>...    The output values you want the action to return, if any (specified as
+                              `name:description:required:default`. Multiples are allowed).
 
 DESCRIPTION
-  Create a new GitHub Action
+  Create a new GitHub Action in a subdirectory
 
 EXAMPLES
-  $ quick create add_to_project --authorName="Mona Octocat" --authorEmail="mona.octocat@example.com"
+  $ quick create "Add to project"
 
-  $ quick create add_to_project -c --authorName="Mona Octocat" --authorEmail="mona.octocat@example.com"
-
-  $ quick create add_to_project --composite --authorName="Mona Octocat" --authorEmail="mona.octocat@example.com"
+  $ quick create "Add to project" --composite
 
   $ quick create add_to_project --authorName="Mona Octocat" --authorEmail="mona.octocat@example.com"
+
+  $ quick create add_to_project -g octocat
+
+  $ quick create "Hello World" --description="greet someone and record the time" --inputs who-to-greet:"who to greet":true:"World" --outputs time:"The time we greeted you"
 ```
 
-_See code: [dist/commands/create.ts](https://github.com/birdcar/quick/blob/v0.0.0/dist/commands/create.ts)_
+_See code: [dist/commands/create.ts](https://github.com/birdcar/quick/blob/v0.0.1/dist/commands/create.ts)_
 
 ## `quick help [COMMAND]`
 
@@ -86,234 +90,4 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
-
-## `quick plugins`
-
-List installed plugins.
-
-```
-USAGE
-  $ quick plugins [--core]
-
-FLAGS
-  --core  Show core plugins.
-
-DESCRIPTION
-  List installed plugins.
-
-EXAMPLES
-  $ quick plugins
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/index.ts)_
-
-## `quick plugins:install PLUGIN...`
-
-Installs a plugin into the CLI.
-
-```
-USAGE
-  $ quick plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
-
-FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Installs a plugin into the CLI.
-
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-ALIASES
-  $ quick plugins add
-
-EXAMPLES
-  $ quick plugins:install myplugin 
-
-  $ quick plugins:install https://github.com/someuser/someplugin
-
-  $ quick plugins:install someuser/someplugin
-```
-
-## `quick plugins:inspect PLUGIN...`
-
-Displays installation properties of a plugin.
-
-```
-USAGE
-  $ quick plugins:inspect PLUGIN...
-
-ARGUMENTS
-  PLUGIN  [default: .] Plugin to inspect.
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ quick plugins:inspect myplugin
-```
-
-## `quick plugins:install PLUGIN...`
-
-Installs a plugin into the CLI.
-
-```
-USAGE
-  $ quick plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
-
-FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Installs a plugin into the CLI.
-
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-ALIASES
-  $ quick plugins add
-
-EXAMPLES
-  $ quick plugins:install myplugin 
-
-  $ quick plugins:install https://github.com/someuser/someplugin
-
-  $ quick plugins:install someuser/someplugin
-```
-
-## `quick plugins:link PLUGIN`
-
-Links a plugin into the CLI for development.
-
-```
-USAGE
-  $ quick plugins:link PLUGIN
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-EXAMPLES
-  $ quick plugins:link myplugin
-```
-
-## `quick plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ quick plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ quick plugins unlink
-  $ quick plugins remove
-```
-
-## `quick plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ quick plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ quick plugins unlink
-  $ quick plugins remove
-```
-
-## `quick plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ quick plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ quick plugins unlink
-  $ quick plugins remove
-```
-
-## `quick plugins update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ quick plugins update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
 <!-- commandsstop -->
