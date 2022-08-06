@@ -97,11 +97,18 @@ export default class Create extends Command {
     await fs.writeFile(path.join(actionPath, 'README.md'), env.render('README.md', context))
     await fs.writeFile(path.join(actionPath, 'action.yml'), env.render('action.yml', context))
 
-    // If it's a JS action and not a composite action, also create the required JS files
+    // If it's a JS action and not a composite action, also create my preferred TS files/folders
     if (!context.composite) {
       await fs.mkdir(path.join(actionPath, 'src'))
+      await fs.mkdir(path.join(actionPath, 'src', 'interfaces'))
+      await fs.mkdir(path.join(actionPath, 'src', 'types'))
+      await fs.mkdir(path.join(actionPath, 'src', 'client'))
+      await fs.mkdir(path.join(actionPath, 'src', 'parsers'))
+      await fs.mkdir(path.join(actionPath, '__tests__'))
+      await fs.writeFile(path.join(actionPath, '.gitignore'), env.render('.gitignore'))
       await fs.writeFile(path.join(actionPath, 'package.json'), env.render('package.json', context))
-      await fs.writeFile(path.join(actionPath, 'src', 'index.js'), '\n')
+      await fs.writeFile(path.join(actionPath, 'tsconfig.json'), env.render('tsconfig.json', {}))
+      await fs.writeFile(path.join(actionPath, 'src', 'index.ts'), '\n')
     }
   }
 }
