@@ -16,6 +16,7 @@ outputs:
   {% for output in outputs %}
   {{ output.name }}:
     description: "{{ output.description }}"
+    value: {% raw %}${{{% endraw %}steps.{{ output.name }}_setter.outputs.{{ output.name }}_value {%raw %}}}{% endraw %}
   {% endfor %}
 {% endif %}
 
