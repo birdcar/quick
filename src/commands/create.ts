@@ -105,7 +105,7 @@ export default class Create extends Command {
       await fs.mkdir(path.join(actionPath, 'src', 'client'))
       await fs.mkdir(path.join(actionPath, 'src', 'parsers'))
       await fs.mkdir(path.join(actionPath, '__tests__'))
-      await fs.writeFile(path.join(actionPath, '.gitignore'), env.render('.gitignore'))
+      await fs.writeFile(path.join(actionPath, '.gitignore'), env.render('gitignore'))
       await fs.writeFile(path.join(actionPath, 'package.json'), env.render('package.json', context))
       await fs.writeFile(path.join(actionPath, 'tsconfig.json'), env.render('tsconfig.json', {}))
       await fs.writeFile(path.join(actionPath, 'src', 'index.ts'), '\n')
