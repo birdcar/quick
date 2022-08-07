@@ -19,7 +19,7 @@ $ npm install -g @birdcar/quick
 $ quick COMMAND
 running command...
 $ quick (--version)
-@birdcar/quick/0.1.1 darwin-arm64 node-v16.15.1
+@birdcar/quick/0.2.0 darwin-arm64 node-v16.15.1
 $ quick --help [COMMAND]
 USAGE
   $ quick COMMAND
@@ -69,7 +69,7 @@ EXAMPLES
   $ quick create "Hello World" --description="greet someone and record the time" --inputs who-to-greet:"who to greet":true:"World" --outputs time:"The time we greeted you"
 ```
 
-_See code: [dist/commands/create.ts](https://github.com/birdcar/quick/blob/v0.1.1/dist/commands/create.ts)_
+_See code: [dist/commands/create.ts](https://github.com/birdcar/quick/blob/v0.2.0/dist/commands/create.ts)_
 
 ## `quick help [COMMAND]`
 
