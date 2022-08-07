@@ -5,7 +5,7 @@
 ## Inputs
 
 {% if inputs.length %}
-{% for input in action.inputs %}
+{% for input in inputs %}
 - `{{ input.name }}`: {{ input.description }} 
 {% endfor %}
 {% else %}
@@ -15,7 +15,7 @@
 ## Outputs
 
 {% if outputs.length %}
-{% for output in action.outputs %}
+{% for output in outputs %}
 - `{{ output.name }}`: {{ output.description }} 
 {% endfor %}
 {% else %}
