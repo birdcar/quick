@@ -16,7 +16,9 @@ outputs:
   {% for output in outputs %}
   {{ output.name }}:
     description: "{{ output.description }}"
+    {% if composite %}
     value: {% raw %}${{{% endraw %}steps.{{ output.name }}_setter.outputs.{{ output.name }}_value {%raw %}}}{% endraw %}
+    {% endif  %}
   {% endfor %}
 {% endif %}
 
