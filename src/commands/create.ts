@@ -103,6 +103,8 @@ export default class Create extends Command {
       await fs.mkdir(path.join(actionPath, '__tests__'))
       await fs.writeFile(path.join(actionPath, '.gitignore'), env.render('gitignore'))
       await fs.writeFile(path.join(actionPath, 'package.json'), env.render('package.json', context))
+      await fs.writeFile(path.join(actionPath, '.eslintignore'), env.render('.eslintignore'))
+      await fs.writeFile(path.join(actionPath, '.eslintrc.json'), env.render('.eslintrc.json'))
       await fs.writeFile(path.join(actionPath, 'src', 'index.js'), '\n')
     }
   }
