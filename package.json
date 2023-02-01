@@ -20,7 +20,7 @@
   "dependencies": {
     "@oclif/core": "^1",
     "@oclif/plugin-help": "^5",
-    "@oclif/plugin-plugins": "^2.0.1",
+    "@oclif/plugin-plugins": "^2.3.0",
     "nunjucks": "^3.2.3",
     "simple-git": "^3.11.0",
     "slugify": "^1.6.5"
